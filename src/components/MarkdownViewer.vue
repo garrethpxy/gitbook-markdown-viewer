@@ -11,7 +11,7 @@
         <h4>ON THIS PAGE</h4>
         <ul>
           <li v-for="(header, index) in headers" :key="index">
-          <a :href="header.link.hash">{{header.text}}</a>
+            <a :href="header.link.hash">{{header.text}}</a>
         </li>
         </ul>
       </div>
@@ -52,12 +52,13 @@ export default {
       const htmlDoc = parser.parseFromString(this.documentHtml, 'text/html');
 
       let headerLinks = htmlDoc.querySelectorAll(".header-anchor");
-      return _.map(headerLinks, link => {
-        return {
-          link,
-          text: link.parentNode.textContent
-        }
-      })
+      return _.chain(headerLinks)
+                .map(link => {
+                    return {
+                      link,
+                      text: link.parentNode.textContent.replace("¶ ", "")
+                    }
+                }).filter(o => !!o.text).value()
     }
   },
   beforeMount () {
@@ -111,6 +112,21 @@ export default {
       font-weight: bold;
       text-decoration: none;
       font-size: 14px;
+    }
+  }
+}
+
+.header-anchor {
+  opacity: 0;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  position: relative;
+  left: -20px;
+
+  &:hover {
+    .header-anchor {
+      opacity: 1;
     }
   }
 }
