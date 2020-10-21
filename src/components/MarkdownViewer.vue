@@ -2,10 +2,10 @@
   <div class="docs">
     <div class="flex">
       <div class="sidebar">
-        <SummaryContent></SummaryContent>
+        <div v-html="pageLinks"></div>
       </div>
       <div class="main-content-area markdown-body">
-        <MainContent></MainContent>
+        <div v-html="documentHtml"></div>
       </div>
       <div v-if="headers" class="header-links sidebar">
         <ul>
@@ -20,10 +20,9 @@
 
 
 <script>
-import SummaryContent from "gitbook-test/SUMMARY.md"
-import MainContent from "gitbook-test/README.md"
 import 'github-markdown-css/github-markdown.css'
 import _ from 'lodash'
+import axios from 'axios'
 
 export default {
   props: {
@@ -32,34 +31,47 @@ export default {
       required: true
     },
     docPath: {
-      type: String
+      type: String,
+      default: ''
     },
     docName: {
-      type: String
+      type: String,
+      required: true
     }
-  },
-  components: {
-    SummaryContent,
-    MainContent
   },
   data(){
     return {
-      headers: [],
-      currentContentPath: "",
+      documentHtml: "",
+      pageLinks: ""
     }
   },
-  mounted(){
-    console.log(this.docPath)
-    this.$nextTick(() => {
-      let headerLinks = document.querySelectorAll(".header-anchor");
-      this.headers = _.map(headerLinks, link => {
+  computed: {
+    headers() {
+      const parser = new DOMParser();
+      const htmlDoc = parser.parseFromString(this.documentHtml, 'text/html');
+
+      let headerLinks = htmlDoc.querySelectorAll(".header-anchor");
+      return _.map(headerLinks, link => {
         return {
           link,
           text: link.parentNode.textContent
         }
       })
-      console.log(this.headers);
-    })
+    }
+  },
+  beforeMount () {
+    // retrieve the html data
+    axios.get(`/html-docs/${this.docPath}/${this.docName}.html`)
+      .then(res => {
+        this.documentHtml = res.data
+      })
+
+    axios.get(`/html-docs/SUMMARY.html`)
+      .then(res => {
+        this.pageLinks = res.data
+      })
+  },
+  mounted(){
   }
 }
 
