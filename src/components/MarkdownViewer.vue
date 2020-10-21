@@ -1,13 +1,14 @@
 <template>
   <div class="docs">
     <div class="flex">
-      <div class="sidebar">
+      <div class="sidebar page-links">
         <div v-html="pageLinks"></div>
       </div>
       <div class="main-content-area markdown-body">
         <div v-html="documentHtml"></div>
       </div>
       <div v-if="headers" class="header-links sidebar">
+        <h4>ON THIS PAGE</h4>
         <ul>
           <li v-for="(header, index) in headers" :key="index">
           <a :href="header.link.hash">{{header.text}}</a>
@@ -112,6 +113,12 @@ export default {
       font-size: 14px;
     }
   }
+}
+
+.page-links {
+  #table-of-contents {
+    font-size: 24px;
+   }
 }
 
 .main-content-area {
