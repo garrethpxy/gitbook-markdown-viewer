@@ -6,20 +6,15 @@ Vue.use(VueRouter)
 
 const routes = [
   /*eslint-disable */
-  { path: '/:docPath*\/:docName*.md',
-      // redirect: to => {
-      //   const { hash, params, query } = to
-      //   console.log(hash, params, query);
-      //   return "/bar"
-      // },
-    name: 'Markdown',
+  {
+    path: `/:pathToDoc*\/:docName*.md`,
+    name: 'DocViewer',
     component: Docs
   },
   /*eslint-enable */
   {
     path: '*',
-    name: 'Docs',
-    component: Docs
+    redirect: { name: 'DocViewer' }
   },
 ]
 

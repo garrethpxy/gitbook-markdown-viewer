@@ -1,7 +1,6 @@
 <template>
   <div>
     <MarkdownViewer
-      sourcePackageName="gitbook-test"
       :docPath="docPath"
       :docName="docName"
     ></MarkdownViewer>
@@ -16,11 +15,13 @@ export default {
   },
   computed: {
     docPath() {
-      return this.$route.params.docPath;
+      console.log('doc path', this.$route.params.pathToDoc);
+      return this.$route.params.pathToDoc;
     },
     docName() {
+      console.log('doc name', this.$route.params.docName);
       return this.$route.params.docName;
-    }
+    },
   }
 }
 </script>

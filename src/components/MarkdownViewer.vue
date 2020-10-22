@@ -2,7 +2,7 @@
   <div class="docs">
     <div class="flex">
       <div class="sidebar page-links">
-        <div v-html="pageLinks"></div>
+        <div v-html="pageLinksHtml"></div>
       </div>
       <div class="main-content-area markdown-body">
         <div v-html="documentHtml"></div>
@@ -24,13 +24,10 @@
 import 'github-markdown-css/github-markdown.css'
 import _ from 'lodash'
 import axios from 'axios'
+const CONFIG = require('../../docs-config')
 
 export default {
   props: {
-    sourcePackageName: {
-      type: String,
-      required: true
-    },
     docPath: {
       type: String,
       default: ''
@@ -43,7 +40,7 @@ export default {
   data(){
     return {
       documentHtml: "",
-      pageLinks: ""
+      pageLinksHtml: ""
     }
   },
   computed: {
@@ -59,18 +56,40 @@ export default {
                       text: link.parentNode.textContent.replace("¶ ", "")
                     }
                 }).filter(o => !!o.text).value()
-    }
+    },
   },
   beforeMount () {
+    const pathToCompiledDocs = `${process.env.BASE_URL}${CONFIG.TARGET_DOC_FOLDER}`;
     // retrieve the html data
-    axios.get(`/html-docs/${this.docPath}/${this.docName}.html`)
+    axios.get(`${pathToCompiledDocs}/${this.docPath}/${this.docName}.html`)
       .then(res => {
         this.documentHtml = res.data
       })
 
-    axios.get(`/html-docs/SUMMARY.html`)
+    axios.get(`${pathToCompiledDocs}/SUMMARY.html`)
       .then(res => {
-        this.pageLinks = res.data
+        this.pageLinksHtml = res.data
+
+        // if no active document is loaded, then load the first pageLink
+        if (!this.docName) {
+          console.info('path to document was invalid. loading first page...')
+
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(this.pageLinksHtml, 'text/html');
+          let pageLinks = htmlDoc.querySelectorAll("li a");
+
+          console.log('routing to:',`${pageLinks[0].pathname}` );
+
+          if(pageLinks.length) {
+            // Simulate a click on the link rather than using vue-router
+            // Reason: these links are constructed at build time and already have baseUrl embedded
+            //  Since vue-router will append the baseUrl during programmatic routing,
+            //  we will end up with a malformed URL with 2 baseUrls.
+            window.location.href = `${pageLinks[0].pathname}`
+          } else {
+            console.log('no pages available for loading.')
+          }
+        }
       })
   },
   mounted(){
