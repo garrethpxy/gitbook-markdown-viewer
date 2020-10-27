@@ -2798,8 +2798,8 @@ content-type@~1.0.4:
   integrity sha1-4TjMdeBAxyexlm/l5fjJruJW/js=
 
 "converse-docs@ssh://git@github.com:garrethpxy/converse-docs.git#v2.6.0":
-  version "0.0.0"
-  resolved "ssh://git@github.com:garrethpxy/converse-docs.git#44d285e8e76e81d41fc10a8f07c31667711aae94"
+  version "1.0.0"
+  resolved "ssh://git@github.com:garrethpxy/converse-docs.git#861cc27ff721ca515c4e8e309cf22c4f7bc0e1f5"
 
 convert-source-map@^1.7.0:
   version "1.7.0"

@@ -4,31 +4,33 @@
       <div class="sidebar page-links">
         <div v-html="pageLinksHtml"></div>
       </div>
-      <div class="main-content-area markdown-body">
-        <div v-html="documentHtml"></div>
+      <div class="flex main-content-area">
+        <div v-html="documentHtml" class="markdown-body"></div>
+
+        <div v-if="headers.length" class="header-links sidebar sticky">
+          <h4 class="sidebar__header">ON THIS PAGE</h4>
+          <ul>
+            <template v-for="(header, index) in headers">
+              <li
+                v-if="header.element !== 'H1'"
+                :key="index"
+                :class="{
+                  'depth-1': header.element === 'H2',
+                  'depth-2': header.element === 'H3',
+                  'hidden': header.element === 'H4',
+                }"
+                >
+                  <a
+                    :key="index"
+                    :href="header.link.hash">
+                      {{header.text}}
+                  </a>
+              </li>
+            </template>
+          </ul>
+        </div>
       </div>
-      <div v-if="headers" class="header-links sidebar">
-        <h4 class="sidebar__header">ON THIS PAGE</h4>
-        <ul>
-          <template v-for="(header, index) in headers">
-            <li
-              v-if="header.element !== 'H1'"
-              :key="index"
-              :class="{
-                'depth-1': header.element === 'H2',
-                'depth-2': header.element === 'H3',
-                'hidden': header.element === 'H4',
-              }"
-              >
-                <a
-                  :key="index"
-                  :href="header.link.hash">
-                    {{header.text}}
-                </a>
-            </li>
-          </template>
-        </ul>
-      </div>
+
     </div>
   </div>
 </template>
@@ -164,7 +166,8 @@ export default {
   }
 
   &.header-links {
-    margin-left: 80px;
+    margin-left: 30px;
+    width: 300px;
 
     li {
       padding: 5px 0;
@@ -239,8 +242,20 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .main-content-area {
-  width: 800px;
+  width: 1100px;
   text-align: left;
+  height: 100vh;
+  overflow-y: scroll;
+
+  .markdown-body {
+    width: 800px;
+  }
+}
+
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
 }
 
 
