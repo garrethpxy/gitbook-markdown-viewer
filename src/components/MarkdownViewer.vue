@@ -8,11 +8,25 @@
         <div v-html="documentHtml"></div>
       </div>
       <div v-if="headers" class="header-links sidebar">
-        <h4>ON THIS PAGE</h4>
+        <h4 class="sidebar__header">ON THIS PAGE</h4>
         <ul>
-          <li v-for="(header, index) in headers" :key="index">
-            <a :href="header.link.hash">{{header.text}}</a>
-        </li>
+          <template v-for="(header, index) in headers">
+            <li
+              v-if="header.element !== 'H1'"
+              :key="index"
+              :class="{
+                'depth-1': header.element === 'H2',
+                'depth-2': header.element === 'H3',
+                'hidden': header.element === 'H4',
+              }"
+              >
+                <a
+                  :key="index"
+                  :href="header.link.hash">
+                    {{header.text}}
+                </a>
+            </li>
+          </template>
         </ul>
       </div>
     </div>
@@ -53,10 +67,14 @@ export default {
                 .map(link => {
                     return {
                       link,
-                      text: link.parentNode.textContent.replace("¶ ", "")
+                      text: link.parentNode.textContent.replace("¶ ", ""),
+                      element: link.parentNode.nodeName
                     }
-                }).filter(o => !!o.text).value()
+                }).filter(o => !!o.text.trim()).value()
     },
+    currentUrlHash() {
+      return window.location.hash.replace("#","");
+    }
   },
   beforeMount () {
     const pathToCompiledDocs = `${process.env.BASE_URL}${CONFIG.TARGET_DOC_FOLDER}`;
@@ -64,11 +82,22 @@ export default {
     axios.get(`${pathToCompiledDocs}/${this.docPath}/${this.docName}.html`)
       .then(res => {
         this.documentHtml = res.data
+
+        // programmatically jump to anchor because DOM may have not been
+        // built when browser's inbuilt anchor jumping was triggered
+        this.$nextTick(() => {
+          this.jumpToAnchor();
+        })
       })
 
     axios.get(`${pathToCompiledDocs}/SUMMARY.html`)
       .then(res => {
-        this.pageLinksHtml = res.data
+        // make links absolute so they are not affected by current window path
+        this.pageLinksHtml = res.data.replace(/(href=")(.*\.md")/g, `$1/$2`);
+
+        this.$nextTick(() => {
+          this.setCurrentPageLinkAsActive();
+        })
 
         // if no active document is loaded, then load the first pageLink
         if (!this.docName) {
@@ -93,6 +122,20 @@ export default {
       })
   },
   mounted(){
+  },
+  methods: {
+    jumpToAnchor() {
+      let id = this.currentUrlHash;
+      if(id) {
+        let top = document.getElementById(id).offsetTop; //Getting Y of target element
+        window.scrollTo(0, top);                        //Go there directly or some transition
+      }
+    },
+    setCurrentPageLinkAsActive() {
+      let pathName = window.location.pathname;
+      let node = document.querySelectorAll(`[href="${pathName}"]`)[0];
+      if (node) node.classList.add('active')
+    }
   }
 }
 
@@ -110,6 +153,10 @@ export default {
   margin-right: 50px;
   text-align: left;
 
+  .sidebar__header {
+    left: 0;
+  }
+
   ul {
     list-style-type: none;
     margin: 0;
@@ -122,6 +169,14 @@ export default {
     li {
       padding: 5px 0;
       border-bottom: 1px dashed rgb(226, 232, 240);
+
+      &.depth-2 {
+        padding-left: 15px;
+        border-bottom: none;
+      }
+      &.hidden {
+        display: none;
+      }
     }
 
     a {
@@ -151,8 +206,35 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .page-links {
+  margin-top: 30px;
+
+  h2 {
+    padding: 10px 0 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+  }
+
+  ul {
+    padding-left: 15px;
+  }
+
+  li {
+    margin: 8px 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: #555;
+
+    &.active {
+     font-weight: bold;
+     color: #333;
+    }
+  }
+
   #table-of-contents {
-    font-size: 24px;
+    display: none;
    }
 }
 

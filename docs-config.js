@@ -1,6 +1,6 @@
 module.exports = {
   // Name of the node module containing the Gitbook source documents and assets
-  NODE_PACKAGE_NAME: 'gitbook-test',
+  NODE_PACKAGE_NAME: 'converse-docs',
 
   // Path of the Vue app is hosted on the server
   // default: '/', if app is hosted at a subpath: '/<path name>/'

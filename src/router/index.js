@@ -19,7 +19,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'history', // note: 'hash' mode may cause header anchor links to not work properly
   base: process.env.BASE_URL,
   routes
 })
