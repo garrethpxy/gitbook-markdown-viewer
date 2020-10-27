@@ -26,7 +26,6 @@ yarn add ssh://git@github.com:garrethpxy/<your-repo-name>.git#<version>
 NODE_PACKAGE_NAME: '<your-package-name>'
 ```
 
-
 ### Compiles and hot-reloads for development
 ```
 yarn run serve

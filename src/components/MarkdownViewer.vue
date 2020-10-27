@@ -1,12 +1,16 @@
 <template>
   <div class="docs">
     <div class="flex">
+      <!-- Left Side Bar -->
       <div class="sidebar page-links">
         <div v-html="pageLinksHtml"></div>
       </div>
+
+      <!-- Document Content Area -->
       <div class="flex main-content-area">
         <div v-html="documentHtml" class="markdown-body"></div>
 
+        <!-- Right Side Bar -->
         <div v-if="headers.length" class="header-links sidebar sticky">
           <h4 class="sidebar__header">ON THIS PAGE</h4>
           <ul>
@@ -80,7 +84,10 @@ export default {
   },
   beforeMount () {
     const pathToCompiledDocs = `${process.env.BASE_URL}${CONFIG.TARGET_DOC_FOLDER}`;
-    // retrieve the html data
+
+    /**
+    * Load the HTML content as specified by the current window path
+    */
     axios.get(`${pathToCompiledDocs}/${this.docPath}/${this.docName}.html`)
       .then(res => {
         this.documentHtml = res.data
@@ -92,6 +99,9 @@ export default {
         })
       })
 
+   /**
+    * Load the left-sidebar main Page Links content, found in SUMMARY.md
+    */
     axios.get(`${pathToCompiledDocs}/SUMMARY.html`)
       .then(res => {
         // make links absolute so they are not affected by current window path
