@@ -19,7 +19,9 @@ module.exports = {
            * Copy all gitbook's images into target folder
            */
           {
+            /*eslint-disable */
             from: `\.gitbook/assets/**/*.png`,
+            /*eslint-enable */
             context: `node_modules/${CONFIG.NODE_PACKAGE_NAME}`,
             to: CONFIG.TARGET_DOC_FOLDER
           },
@@ -31,7 +33,7 @@ module.exports = {
             context: `node_modules/${CONFIG.NODE_PACKAGE_NAME}`,
             to: `${CONFIG.TARGET_DOC_FOLDER}/[path][name].html`,
             toType: 'template',
-            transform(content, path) {
+            transform(content) {
               // transform Markdown into html
               let parsed = md.render(content + "")
               // point all images to target folder
@@ -45,17 +47,5 @@ module.exports = {
       ]
       })
     ]
-  },
-  chainWebpack: config => {
-    config.module.rule('md')
-      .test(/\.md/)
-      .use('vue-loader')
-      .loader('vue-loader')
-      .end()
-      .use('vue-markdown-loader')
-      .loader('vue-markdown-loader/lib/markdown-compiler')
-      .options({
-        raw: true
-      })
   }
 }
