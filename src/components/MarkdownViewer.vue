@@ -7,7 +7,7 @@
       </div>
 
       <!-- Document Content Area -->
-      <div class="flex main-content-area">
+      <div ref="contentArea" class="flex main-content-area">
         <div v-html="documentHtml" class="markdown-body"></div>
 
         <!-- Right Side Bar -->
@@ -97,7 +97,7 @@ export default {
     */
     axios.get(`${pathToCompiledDocs}/${this.docPath}/${this.docName}.html`)
       .then(res => {
-        this.documentHtml = res.data
+        this.documentHtml = "<br />" + res.data // add a br to the top of doc for better readability
 
         // programmatically jump to anchor because DOM may have not been
         // built when browser's inbuilt anchor jumping was triggered
@@ -152,7 +152,8 @@ export default {
       let id = this.currentUrlHash;
       if(id) {
         let top = document.getElementById(id).offsetTop; //Getting Y of target element
-        window.scrollTo(0, top);                        //Go there directly or some transition
+        console.log('scrolling to', top)
+        this.$refs.contentArea.scrollTo(0, top);                        //Go there directly or some transition
       }
     },
     setCurrentPageLinkAsActive() {
@@ -167,6 +168,8 @@ export default {
 
 <style lang="scss">
 
+$sidebarTopOffsetPx: 40px;
+
 .flex {
   display: flex;
   justify-content: center;
@@ -179,6 +182,7 @@ export default {
 
   .sidebar__header {
     left: 0;
+    margin-top: $sidebarTopOffsetPx + 20;
   }
 
   ul {
@@ -216,12 +220,14 @@ export default {
 }
 
 .header-anchor {
+  left: -20px;
+  z-index: 10000000;
   opacity: 0;
+  position: absolute;
 }
 
 h1,h2,h3,h4,h5,h6 {
   position: relative;
-  left: -20px;
 
   &:hover {
     .header-anchor {
@@ -231,7 +237,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .page-links {
-  margin-top: 30px;
+  margin-top: $sidebarTopOffsetPx;
 
   h2 {
     padding: 10px 0 0 10px;
@@ -271,6 +277,8 @@ h1,h2,h3,h4,h5,h6 {
 
   .markdown-body {
     width: 800px;
+    margin-left: 25px;
+    position: relative;
   }
 }
 
