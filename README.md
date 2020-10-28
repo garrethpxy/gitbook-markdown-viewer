@@ -36,10 +36,13 @@ yarn add ssh://git@github.com:garrethpxy/<your-repo-name>.git#<version>
 ```
 
 ### Set the Node Package Name in the configuration
-```
-docs-config.js
-
-NODE_PACKAGE_NAME: '<your-package-name>'
+```javascript
+// docs-config.js
+module.exports = {
+  ..
+  NODE_PACKAGE_NAME: '<your-package-name>'
+  ..
+}
 ```
 
 ### Compiles and hot-reloads for development
