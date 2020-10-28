@@ -64,6 +64,10 @@ export default {
     }
   },
   computed: {
+    /**
+     * Parses the currently loaded HTML document and retrieve the header links
+     * Displayed in the left sidebar
+     */
     headers() {
       const parser = new DOMParser();
       const htmlDoc = parser.parseFromString(this.documentHtml, 'text/html');
@@ -76,6 +80,9 @@ export default {
                       text: link.parentNode.textContent.replace("¶ ", ""),
                       element: link.parentNode.nodeName
                     }
+                    // drop headers with no text
+                    //  possible if gitbook authors accidentally
+                    //  leave empty header elements in the Wyziwig editor
                 }).filter(o => !!o.text.trim()).value()
     },
     currentUrlHash() {
@@ -104,17 +111,17 @@ export default {
     */
     axios.get(`${pathToCompiledDocs}/SUMMARY.html`)
       .then(res => {
-        // make links absolute so they are not affected by current window path
+        // Rewrite links and make them absolute so they are not affected by current window path
+        // Reason:
+        //  - we are using the browser's URL & history to navigate around the gitbook
+        //  - when the browser navigates into nested pages, these relative links will break
         this.pageLinksHtml = res.data.replace(/(href=")(.*\.md")/g, `$1/$2`);
-
-        this.$nextTick(() => {
-          this.setCurrentPageLinkAsActive();
-        })
 
         // if no active document is loaded, then load the first pageLink
         if (!this.docName) {
           console.info('path to document was invalid. loading first page...')
 
+          // parse the HTML up into a virtual dom and extract the page links
           const parser = new DOMParser();
           const htmlDoc = parser.parseFromString(this.pageLinksHtml, 'text/html');
           let pageLinks = htmlDoc.querySelectorAll("li a");
@@ -130,6 +137,11 @@ export default {
           } else {
             console.log('no pages available for loading.')
           }
+        } else {
+          // if a document was loaded, then set the page link active style
+          this.$nextTick(() => {
+            this.setCurrentPageLinkAsActive();
+          })
         }
       })
   },
