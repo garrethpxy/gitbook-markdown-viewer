@@ -1,5 +1,8 @@
 <template>
   <div class="docs">
+    <div class="sticky-nav">
+      <SearchBar></SearchBar>
+    </div>
     <div class="flex">
       <!-- Left Side Bar -->
       <div class="sidebar page-links">
@@ -44,11 +47,14 @@
 import 'github-markdown-css/github-markdown.css'
 import _ from 'lodash'
 import axios from 'axios'
-import Fuse from 'fuse.js'
+import SearchBar from './SearchBar.vue'
 
 const CONFIG = require('../../docs-config')
 
 export default {
+  components: {
+    SearchBar
+  },
   props: {
     docPath: {
       type: String,
@@ -101,7 +107,7 @@ export default {
     */
     axios.get(`${pathToCompiledDocs}/${this.docPath}/${this.docName}.html`)
       .then(res => {
-        this.documentHtml = "<br />" + res.data // add a br to the top of doc for better readability
+        this.documentHtml = "<br /> <br /> <br />" + res.data // add a br to the top of doc for better readability
 
         // programmatically jump to anchor because DOM may have not been
         // built when browser's inbuilt anchor jumping was triggered
@@ -148,22 +154,6 @@ export default {
           })
         }
       })
-
-      // get search data for Fuse.js
-      axios.get(`${process.env.BASE_URL}${CONFIG.HEADERS_LINKS_DATA_FILENAME}`)
-      .then(res => {
-        this.allHeadersData = res.data;
-
-        const options = {
-          includeScore: true,
-          keys: ['headerText']
-        }
-
-        const fuse = new Fuse(this.allHeadersData, options);
-
-        const result = fuse.search('intent');
-        console.log('result',result);
-      })
   },
   mounted(){
   },
@@ -188,7 +178,7 @@ export default {
 
 <style lang="scss">
 
-$sidebarTopOffsetPx: 40px;
+$sidebarTopOffsetPx: 70px;
 
 .flex {
   display: flex;
@@ -217,11 +207,20 @@ $sidebarTopOffsetPx: 40px;
 
     li {
       padding: 5px 0;
-      border-bottom: 1px dashed rgb(226, 232, 240);
+      border-top: 1px dashed rgb(226, 232, 240);
+
+      &:first-of-type  {
+        border-top: none;
+      }
+
+      &:last-of-type  {
+        border-bottom: 1px dashed rgb(226, 232, 240);;
+      }
 
       &.depth-2 {
-        padding-left: 15px;
-        border-bottom: none;
+        padding: 0px 15px 5px;
+        border-top: none;
+        a {font-weight: normal;}
       }
       &.hidden {
         display: none;
@@ -299,6 +298,12 @@ h1,h2,h3,h4,h5,h6 {
     width: 800px;
     margin-left: 25px;
     position: relative;
+
+    /* Force anchor tag jump offset */
+    h1,h2,h3,h4 {
+      padding-top: 65px;
+      margin-top: -65px;
+    }
   }
 }
 
@@ -306,6 +311,15 @@ h1,h2,h3,h4,h5,h6 {
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
+}
+
+.sticky-nav {
+  position: absolute;
+  width: 100vw;
+  z-index: 1000000;
+  background: #FFF;
+  border-bottom: 1px solid #EEE;
+  padding: 10px;
 }
 
 

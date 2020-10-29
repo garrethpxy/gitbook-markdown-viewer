@@ -20,19 +20,34 @@ module.exports = {
       new MergeIntoSingle({
         files: [{
           src:[
-            `node_modules/${CONFIG.NODE_PACKAGE_NAME}/**/*.md`,
+            `node_modules/${CONFIG.NODE_PACKAGE_NAME}/**/!(SUMMARY).md`,
           ],
           dest: (markdownText, path) => {
             let htmlContent = md.render(markdownText + "");
             const dom = new JSDOM(htmlContent);
             const headers = Array.from(dom.window.document.querySelectorAll(".header-anchor"));
-            const jsonObject = headers.map(header => {
-              return {
-                hash: header.hash,
-                headerText: header.parentNode.textContent.replace("¶ ", ""),
-                elementType: header.parentNode.nodeName,
-                docPath: path.replace(`node_modules/${CONFIG.NODE_PACKAGE_NAME}`, '')
+            const jsonObject = headers.map((header, index) => {
+
+              const makeLinkObject = (htmlAnchorElement) => {
+                return {
+                  hash: htmlAnchorElement.hash,
+                  headerText: htmlAnchorElement.parentNode.textContent.replace("¶ ", ""),
+                  documentTitle: headers[0].parentNode.textContent.replace("¶ ", ""),
+                  elementType: htmlAnchorElement.parentNode.nodeName,
+                  docPath: path.replace(`node_modules/${CONFIG.NODE_PACKAGE_NAME}`, ''),
+                }
               }
+
+              let o = makeLinkObject(header);
+
+              // if we need to retrieve the ancestor header... not used for now
+              // let ancestorNodeName = o.elementType === 'H3' ? 'H2' : 'H1';
+              // let ancestorHeaderLink = headers.slice(0, index).reverse().find(header => header.parentNode.nodeName === ancestorNodeName);
+              // if(ancestorHeaderLink) {
+              //   o.ancestorHeader = makeLinkObject(ancestorHeaderLink);
+              // }
+
+              return o;
             });
             return {
               [CONFIG.HEADERS_LINKS_DATA_FILENAME]: JSON.stringify(jsonObject)
