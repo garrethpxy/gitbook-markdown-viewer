@@ -8,4 +8,8 @@ module.exports = {
 
   // Location of the compiled HTML Docs and Assets
   TARGET_DOC_FOLDER: 'docs-compiled',
+
+  // File name of headers JSON file (used for search).
+  // Put at root folder with webpack-merge-and-include-globally
+  HEADERS_LINKS_DATA_FILENAME: 'headerlinksdata.json'
 }

@@ -44,6 +44,8 @@
 import 'github-markdown-css/github-markdown.css'
 import _ from 'lodash'
 import axios from 'axios'
+import Fuse from 'fuse.js'
+
 const CONFIG = require('../../docs-config')
 
 export default {
@@ -60,7 +62,9 @@ export default {
   data(){
     return {
       documentHtml: "",
-      pageLinksHtml: ""
+      pageLinksHtml: "",
+      allHeadersData: {},
+      fuse: null
     }
   },
   computed: {
@@ -143,6 +147,22 @@ export default {
             this.setCurrentPageLinkAsActive();
           })
         }
+      })
+
+      // get search data for Fuse.js
+      axios.get(`${process.env.BASE_URL}${CONFIG.HEADERS_LINKS_DATA_FILENAME}`)
+      .then(res => {
+        this.allHeadersData = res.data;
+
+        const options = {
+          includeScore: true,
+          keys: ['headerText']
+        }
+
+        const fuse = new Fuse(this.allHeadersData, options);
+
+        const result = fuse.search('intent');
+        console.log('result',result);
       })
   },
   mounted(){
