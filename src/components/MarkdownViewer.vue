@@ -303,7 +303,7 @@ h1,h2,h3,h4,h5,h6 {
     /* Force anchor tag jump offset */
     h1,h2,h3,h4 {
       padding-top: 65px;
-      margin-top: -65px;
+      margin-top: -45px;
     }
   }
 }
