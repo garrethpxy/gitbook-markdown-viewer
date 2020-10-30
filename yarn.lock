@@ -2785,9 +2785,9 @@ content-type@~1.0.4:
   resolved "https://registry.npm.taobao.org/content-type/download/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
   integrity sha1-4TjMdeBAxyexlm/l5fjJruJW/js=
 
-"converse-docs@ssh://git@github.com:garrethpxy/converse-docs.git#v2.6.0":
+"converse-docs@ssh://git@github.com:taigers/converse-docs.git#v2.7.0":
   version "1.0.0"
-  resolved "ssh://git@github.com:garrethpxy/converse-docs.git#861cc27ff721ca515c4e8e309cf22c4f7bc0e1f5"
+  resolved "ssh://git@github.com:taigers/converse-docs.git#066b63a5e9390b45b87c0dc13789fb05e7fa3dc9"
 
 convert-source-map@^1.7.0:
   version "1.7.0"
