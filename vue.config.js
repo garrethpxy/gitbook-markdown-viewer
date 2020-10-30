@@ -20,9 +20,12 @@ module.exports = {
       new MergeIntoSingle({
         files: [{
           src:[
-            `node_modules/${CONFIG.NODE_PACKAGE_NAME}/**/!(SUMMARY).md`,
+            `node_modules/${CONFIG.NODE_PACKAGE_NAME}/**/*.md`,
           ],
           dest: (markdownText, path) => {
+            if(path.indexOf("SUMMARY.md") !== -1) {
+              return {[CONFIG.HEADERS_LINKS_DATA_FILENAME]: "[]"};
+            }
             let htmlContent = md.render(markdownText + "");
             const dom = new JSDOM(htmlContent);
             const headers = Array.from(dom.window.document.querySelectorAll(".header-anchor"));
