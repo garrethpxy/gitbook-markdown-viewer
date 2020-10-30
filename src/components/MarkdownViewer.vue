@@ -187,7 +187,6 @@ $sidebarTopOffsetPx: 70px;
 
 .sidebar {
   width: 300px;
-  margin-right: 50px;
   text-align: left;
 
   .sidebar__header {
@@ -202,8 +201,9 @@ $sidebarTopOffsetPx: 70px;
   }
 
   &.header-links {
-    margin-left: 30px;
+    padding-left: 30px;
     width: 300px;
+    border-left: 1px solid #EEE;
 
     li {
       padding: 5px 0;
@@ -256,7 +256,8 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .page-links {
-  margin-top: $sidebarTopOffsetPx;
+  padding-top: $sidebarTopOffsetPx;
+  border-right: 1px solid #EEE;
 
   h2 {
     padding: 10px 0 0 10px;
@@ -296,7 +297,7 @@ h1,h2,h3,h4,h5,h6 {
 
   .markdown-body {
     width: 800px;
-    margin-left: 25px;
+    margin: 0 35px;
     position: relative;
 
     /* Force anchor tag jump offset */
