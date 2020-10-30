@@ -1,5 +1,8 @@
 <template>
   <div class="docs">
+    <div class="sticky-nav">
+      <SearchBar></SearchBar>
+    </div>
     <div class="flex">
       <!-- Left Side Bar -->
       <div class="sidebar page-links">
@@ -44,9 +47,14 @@
 import 'github-markdown-css/github-markdown.css'
 import _ from 'lodash'
 import axios from 'axios'
+import SearchBar from './SearchBar.vue'
+
 const CONFIG = require('../../docs-config')
 
 export default {
+  components: {
+    SearchBar
+  },
   props: {
     docPath: {
       type: String,
@@ -60,7 +68,9 @@ export default {
   data(){
     return {
       documentHtml: "",
-      pageLinksHtml: ""
+      pageLinksHtml: "",
+      allHeadersData: {},
+      fuse: null
     }
   },
   computed: {
@@ -97,7 +107,7 @@ export default {
     */
     axios.get(`${pathToCompiledDocs}/${this.docPath}/${this.docName}.html`)
       .then(res => {
-        this.documentHtml = "<br />" + res.data // add a br to the top of doc for better readability
+        this.documentHtml = "<br /> <br /> <br />" + res.data // add a br to the top of doc for better readability
 
         // programmatically jump to anchor because DOM may have not been
         // built when browser's inbuilt anchor jumping was triggered
@@ -168,7 +178,7 @@ export default {
 
 <style lang="scss">
 
-$sidebarTopOffsetPx: 40px;
+$sidebarTopOffsetPx: 70px;
 
 .flex {
   display: flex;
@@ -177,7 +187,6 @@ $sidebarTopOffsetPx: 40px;
 
 .sidebar {
   width: 300px;
-  margin-right: 50px;
   text-align: left;
 
   .sidebar__header {
@@ -192,16 +201,26 @@ $sidebarTopOffsetPx: 40px;
   }
 
   &.header-links {
-    margin-left: 30px;
+    padding-left: 30px;
     width: 300px;
+    border-left: 1px solid #EEE;
 
     li {
       padding: 5px 0;
-      border-bottom: 1px dashed rgb(226, 232, 240);
+      border-top: 1px dashed rgb(226, 232, 240);
+
+      &:first-of-type  {
+        border-top: none;
+      }
+
+      &:last-of-type  {
+        border-bottom: 1px dashed rgb(226, 232, 240);;
+      }
 
       &.depth-2 {
-        padding-left: 15px;
-        border-bottom: none;
+        padding: 0px 15px 5px;
+        border-top: none;
+        a {font-weight: normal;}
       }
       &.hidden {
         display: none;
@@ -237,7 +256,8 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .page-links {
-  margin-top: $sidebarTopOffsetPx;
+  padding-top: $sidebarTopOffsetPx;
+  border-right: 1px solid #EEE;
 
   h2 {
     padding: 10px 0 0 10px;
@@ -277,8 +297,14 @@ h1,h2,h3,h4,h5,h6 {
 
   .markdown-body {
     width: 800px;
-    margin-left: 25px;
+    margin: 0 35px;
     position: relative;
+
+    /* Force anchor tag jump offset */
+    h1,h2,h3,h4 {
+      padding-top: 65px;
+      margin-top: -65px;
+    }
   }
 }
 
@@ -286,6 +312,15 @@ h1,h2,h3,h4,h5,h6 {
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
+}
+
+.sticky-nav {
+  position: absolute;
+  width: 100vw;
+  z-index: 1000000;
+  background: #FFF;
+  border-bottom: 1px solid #EEE;
+  padding: 10px;
 }
 
 
