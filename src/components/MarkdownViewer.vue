@@ -107,7 +107,8 @@ export default {
     */
     axios.get(`${pathToCompiledDocs}/${this.docPath}/${this.docName}.html`)
       .then(res => {
-        this.documentHtml = "<br /> <br /> <br />" + res.data // add a br to the top of doc for better readability
+        // add a <br> for better readability
+        this.documentHtml = res.data  + '<br /> <br />'
 
         // programmatically jump to anchor because DOM may have not been
         // built when browser's inbuilt anchor jumping was triggered
@@ -178,7 +179,7 @@ export default {
 
 <style lang="scss">
 
-$sidebarTopOffsetPx: 70px;
+$topbarHeightOffset: 53px;
 
 .flex {
   display: flex;
@@ -191,7 +192,7 @@ $sidebarTopOffsetPx: 70px;
 
   .sidebar__header {
     left: 0;
-    margin-top: $sidebarTopOffsetPx + 20;
+    margin-top: 40px;
   }
 
   ul {
@@ -256,8 +257,12 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .page-links {
-  padding-top: $sidebarTopOffsetPx;
+  margin-top: $topbarHeightOffset;
   border-right: 1px solid #EEE;
+  height: calc(100vh - #{$topbarHeightOffset});
+  overflow-y: scroll;
+  padding: 20px 10px;
+  box-sizing: border-box;
 
   h2 {
     padding: 10px 0 0 10px;
@@ -290,9 +295,10 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .main-content-area {
+  margin-top: $topbarHeightOffset;
+  height: calc(100vh - #{$topbarHeightOffset});
   width: 1100px;
   text-align: left;
-  height: 100vh;
   overflow-y: scroll;
 
   .markdown-body {
@@ -302,8 +308,7 @@ h1,h2,h3,h4,h5,h6 {
 
     /* Force anchor tag jump offset */
     h1,h2,h3,h4 {
-      padding-top: 65px;
-      margin-top: -45px;
+      padding-top: 20px;
     }
   }
 }
@@ -321,6 +326,19 @@ h1,h2,h3,h4,h5,h6 {
   background: #FFF;
   border-bottom: 1px solid #EEE;
   padding: 10px;
+}
+
+@media only screen and (max-width: 1439px) {
+  .sidebar {
+    width: 30%;
+  }
+  .main-content-area {
+    width: 70%;
+
+    .sidebar {
+      width: 30%
+    }
+  }
 }
 
 
