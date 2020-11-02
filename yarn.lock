@@ -2934,7 +2934,7 @@ content-type@~1.0.4:
 
 "converse-docs@ssh://git@github.com:taigers/converse-docs.git#v2.7.0":
   version "1.0.0"
-  resolved "ssh://git@github.com:taigers/converse-docs.git#bf932285ce0e6d996f430ed6d8119a8caa754b87"
+  resolved "ssh://git@github.com:taigers/converse-docs.git#cb905dce3f96112b90c9eec93e3f5c90cb3586ab"
 
 convert-source-map@^1.7.0:
   version "1.7.0"

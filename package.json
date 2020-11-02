@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "update-docs": "yarn add --force ssh://git@github.com:taigers/converse-docs.git#v2.7.0"
   },
   "dependencies": {
     "axios": "^0.20.0",
