@@ -100,6 +100,14 @@ export default {
     }
   },
   beforeMount () {
+
+    /**
+     * Set the page header based on the currently loaded document name
+     */
+     if(this.docName) {
+       window.document.title = ` ${this.makeTitle(this.docName)} | ${CONFIG.PAGE_TITLE}`;
+     }
+
     const pathToCompiledDocs = `${process.env.BASE_URL}${CONFIG.TARGET_DOC_FOLDER}`;
 
     /**
@@ -115,6 +123,7 @@ export default {
         this.$nextTick(() => {
           this.jumpToAnchor();
         })
+
       })
 
    /**
@@ -171,6 +180,13 @@ export default {
       let pathName = window.location.pathname;
       let node = document.querySelectorAll(`[href="${pathName}"]`)[0];
       if (node) node.classList.add('active')
+    },
+    makeTitle(pageSlug) {
+      let words = pageSlug.split('-');
+      return words.map((word) => {
+        return word.charAt(0).toUpperCase() + word.substring(1, word.length);
+      }).join(' ');
+
     }
   }
 }
@@ -287,6 +303,10 @@ h1,h2,h3,h4,h5,h6 {
      font-weight: bold;
      color: #333;
     }
+  }
+
+  .header-anchor {
+    display: none;
   }
 
   #table-of-contents {

@@ -6,6 +6,9 @@ module.exports = {
   // default: '/', if app is hosted at a subpath: '/<path name>/'
   APP_BASE_URL: '/',
 
+  // Name of the page title
+  PAGE_TITLE: 'Omnitive Converse User Guide v2.7.0',
+
   // Location of the compiled HTML Docs and Assets
   TARGET_DOC_FOLDER: 'docs-compiled',
 
