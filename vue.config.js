@@ -102,6 +102,9 @@ module.exports = {
               return parsed;
             },
          },
+         /**
+           * Copy Netlify redirect rule file into root dist folder
+           */
          {
           from: `_redirects`,
           context: `src`,
