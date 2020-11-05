@@ -26,6 +26,10 @@ module.exports = {
   },
   configureWebpack: {
     plugins: [
+      /**
+       * Create JS file with JSON array of header anchors from all the markdown files
+       * Used for Search functionality at runtime
+       */
       new MergeIntoSingle({
         files: [{
           src:[
