@@ -22,6 +22,13 @@ export default {
       console.log('doc name', this.$route.params.docName);
       return this.$route.params.docName;
     },
+  },
+  mounted() {
+    window.postMessage(JSON.stringify({
+      docName: this.docName,
+      docPath: this.docPath
+    }), '*')
+    console.log('posted')
   }
 }
 </script>

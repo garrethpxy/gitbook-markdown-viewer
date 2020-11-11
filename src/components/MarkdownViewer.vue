@@ -61,8 +61,7 @@ export default {
       default: ''
     },
     docName: {
-      type: String,
-      required: true
+      type: String
     }
   },
   data(){
