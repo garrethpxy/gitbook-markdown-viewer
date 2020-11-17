@@ -24,7 +24,7 @@ export default {
     },
   },
   mounted() {
-    window.postMessage(JSON.stringify({
+    window.parent.postMessage(JSON.stringify({
       docName: this.docName,
       docPath: this.docPath
     }), '*')
