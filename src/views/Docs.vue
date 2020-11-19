@@ -26,7 +26,8 @@ export default {
   mounted() {
     window.parent.postMessage(JSON.stringify({
       docName: this.docName,
-      docPath: this.docPath
+      docPath: this.docPath,
+      type: 'gitbook-mardown-viewer-data-transfer',
     }), '*')
     console.log('posted')
   }
