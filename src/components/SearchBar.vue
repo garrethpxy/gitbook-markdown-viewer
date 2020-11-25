@@ -19,7 +19,7 @@
 
 <script>
 import axios from 'axios';
-import Fuse from 'fuse.js'
+import Fuse from 'fuse.js-ie11'
 const CONFIG = require('../../docs-config')
 
 export default {

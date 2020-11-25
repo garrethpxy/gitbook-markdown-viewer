@@ -12,7 +12,7 @@
     "axios": "^0.20.0",
     "converse-docs": "ssh://git@github.com:taigers/converse-docs.git#v2.7.0",
     "core-js": "^3.6.5",
-    "fuse.js": "^6.4.2",
+    "fuse.js-ie11": "^6.0.0",
     "gitbook-markdown-css": "^1.1.0",
     "lodash": "^4.17.20",
     "vue": "^2.6.11",
