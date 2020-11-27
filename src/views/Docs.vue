@@ -13,23 +13,40 @@ export default {
   components: {
     MarkdownViewer
   },
+  data() {
+    return {
+      docHash: '',
+    };
+  },
   computed: {
     docPath() {
-      console.log('doc path', this.$route.params.pathToDoc);
       return this.$route.params.pathToDoc;
     },
     docName() {
-      console.log('doc name', this.$route.params.docName);
       return this.$route.params.docName;
     },
   },
+  watch: {
+    '$route.hash': {
+      handler(docHash) {
+        this.docHash = docHash;
+        this.postMessage();
+      },
+      immediate: true,
+    }
+  },
+  methods: {
+    postMessage() {
+      window.parent.postMessage(JSON.stringify({
+        docName: this.docName,
+        docPath: this.docPath,
+        docHash: this.docHash,
+        type: 'gitbook-mardown-viewer-data-transfer',
+      }), '*');
+    },
+  },
   mounted() {
-    window.parent.postMessage(JSON.stringify({
-      docName: this.docName,
-      docPath: this.docPath,
-      type: 'gitbook-mardown-viewer-data-transfer',
-    }), '*')
-    console.log('posted')
+    this.postMessage();
   }
 }
 </script>
