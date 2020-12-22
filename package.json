@@ -6,11 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "update-docs": "yarn add --force git+https://e511102b4c63ecbfb73af581202fee7cf232f500:x-oauth-basic@github.com/taigers/converse-docs.git#v2.7.0"
+    "update-docs": "yarn add --force git+https://e511102b4c63ecbfb73af581202fee7cf232f500:x-oauth-basic@github.com/taigers/converse-docs.git#v2.8.0"
   },
   "dependencies": {
     "axios": "^0.20.0",
-    "converse-docs": "git+https://e511102b4c63ecbfb73af581202fee7cf232f500:x-oauth-basic@github.com/taigers/converse-docs.git#v2.7.0",
+    "converse-docs": "git+https://e511102b4c63ecbfb73af581202fee7cf232f500:x-oauth-basic@github.com/taigers/converse-docs.git#v2.8.0",
     "core-js": "^3.6.5",
     "fuse.js-ie11": "^6.0.0",
     "gitbook-markdown-css": "^1.1.0",
